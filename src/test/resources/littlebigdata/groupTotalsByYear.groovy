@@ -53,7 +53,7 @@ while (dateStart.before(new Date()))
 	dateStart = nextMonth(dateStart)
 	dateEnd = nextMonth(dateEnd)
 }
-println "year, total, valid, deleted, users"
+println "year, total, valid, deleted/admin, users"
 
 Integer total = 0
 Integer valid = 0

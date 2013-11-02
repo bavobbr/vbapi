@@ -6,13 +6,13 @@ import groovy.sql.Sql
 Credentials credentials = new Credentials(username: "user", password: "pass")
 ForumService service = new ForumService(credentials, "http://forum.shrimprefuge.be")
 
-int last = 1205188
+int last = 1206368
 int scanLast = Math.min(9999999, last)
 int batchSize = 100
-int startOfBatch = 1204737
-def batches = scanLast-startOfBatch / batchSize
+int startOfBatch = 1205416
+def batches = (scanLast-startOfBatch) / batchSize
 
-1.upto(batches) {
+1.upto(Math.round(batches)) {
 	println "Batch $it - Scanning from $startOfBatch for $batchSize items"
 	def posts = service.getPosts(startOfBatch, batchSize)
 	startOfBatch = startOfBatch + batchSize

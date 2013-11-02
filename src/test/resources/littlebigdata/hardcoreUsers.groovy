@@ -45,7 +45,7 @@ while (dateStart.before(new Date()))
 	dateStart = nextMonth(dateStart)
 	dateEnd = nextMonth(dateEnd)
 }
-println "start date, active users"
+println "start date, active users, hardcore users"
 results.each { List data ->
 	def start = data[0].format("yyyy-MM")
 	println "${start},${data[1]}, ${data[2]}"

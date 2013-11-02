@@ -51,8 +51,8 @@ while (dateStart.before(new Date()))
 	dateStart = nextMonth(dateStart)
 	dateEnd = nextMonth(dateEnd)
 }
-println "start date, total posts, valid posts, deleted posts, active users"
+println "start date, total posts, valid posts, deleted/admin posts, active users"
 results.each { List data ->
-	def start = data[0].format("yyyy-MM")
+	def start = data[0].format("dd-MM-yyyy")
 	println "${start},${data[2]}, ${data[3]}, ${data[4]}, ${data[5]}"
 }
