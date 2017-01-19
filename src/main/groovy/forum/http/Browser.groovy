@@ -44,7 +44,8 @@ class Browser
             vb_login_username: user,
             vb_login_md5password_utf: hashedPassword,
             cookieuser: "1"]
-    http.post(path: loginUrl, body: postBody, requestContentType: ContentType.URLENC) { resp ->
+    http.post(path: loginUrl, body: postBody, requestContentType: ContentType.URLENC) { resp, reader ->
+	  def pbody = reader.text()
       if (resp.statusLine.statusCode != 200)
       {
         throw new IllegalStateException("Browser failed to log in: " + resp.statusLine)
@@ -260,6 +261,7 @@ class Browser
 
 	public GPathResult getPost(Integer id)
 	{
+		//println "getting post at ${showpostUrl}?p=$id"
 		GPathResult html = http.get(path: showpostUrl, query: [p: "$id"])
 		return html
 	}

@@ -26,7 +26,7 @@ class PostManager
 		try
 		{
 			def page = browser.getPost(id)
-			post = parsePost(page)
+			post = parsePost(page, id)
 			post.setPostId(id)
 		}
 		catch (e)
@@ -46,22 +46,25 @@ class PostManager
 		return posts
 	}
 
-	private Post parsePost(GPathResult top)
+	private Post parsePost(GPathResult top, Long id)
 	{
 		Post post
 		def postnode = getPostNode(top)
-		try
-		{
-			String username = getUsername(postnode)
-			String message = getPostText(postnode)
-			String datetext = getPostDate(postnode)
-			Date date = PostUtils.convertDate(datetext)
-			post = new Post(username: username, message: message, date: date)
+		if (postnode) {
+			try {
+				String username = getUsername(postnode)
+				String message = getPostText(postnode)
+				String datetext = getPostDate(postnode)
+				Date date = PostUtils.convertDate(datetext)
+				post = new Post(username: username, message: message, date: date)
+			}
+			catch (e) {
+				println "${e.message} error for $id, postnode is ${postnode}"
+				//println "page is ${top}"
+				post = new Post(valid: false)
+			}
 		}
-		catch (e)
-		{
-			post = new Post(valid: false)
-		}
+		else post = new Post(username: null, message: null, date: null)
 		return post
 	}
 

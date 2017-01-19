@@ -3,21 +3,21 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven'
 
-version = '1.1.9'
+version = '1.2'
 group = "bavobbr"
 
 
 repositories {
     mavenCentral()
-    maven {
-        url "/home/bbr/.m2/repository"
-    }
 }
 
 
 dependencies {
     compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.5.2'
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.1.5'
+    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.4.6'
+    compile group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.4.6'
+    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.4.6'
+    compile group: 'org.codehaus.groovy', name: 'groovy-xml', version: '2.4.6'
 	compile 'commons-cli:commons-cli:1.2'
 	runtime 'mysql:mysql-connector-java:5.1.20'
 

@@ -34,12 +34,19 @@ while (dateStart.before(new Date()))
 	dateEnd = nextYear(dateEnd)
 }
 
-def topresults = results.collect { it.toSortedMap().take(50) }
+def topresults = results.collect { it.toSortedMap().take(300) }
 
 def compareAndPrint = { LinkedHashMap a, LinkedHashMap b, int year ->
-	File out = new File("/home/bbr/Desktop/hitlist_${year}.csv")
+	File out = new File("/Users/bbr/Desktop/hitlist_${year}.csv")
+	out.delete()
 	out << "year $year\n"
+	print "year $year\n"
 	out << "rank, user, posts, previous rank, difference\n"
+	print "rank, user, posts, previous rank, difference\n"
+	List rankedUsers = []
+	List derankedUsers = []
+	List newUsers = []
+	List byeUsers = []
 	b.eachWithIndex {  k, v, idx ->
 		def currentRank = idx +1
 		def previousRank = "-"
@@ -48,17 +55,50 @@ def compareAndPrint = { LinkedHashMap a, LinkedHashMap b, int year ->
 			previousRank = a.findIndexOf { it.key == k } + 1
 			diff = previousRank - currentRank
 		}
-		if (diff instanceof Number && diff > 0) diff = "+"+diff
 		out << "$currentRank, $k, $v, $previousRank, $diff\n"
+		print "$currentRank, $k, $v, $previousRank, $diff\n"
+		if (diff instanceof Number && currentRank <= 50) rankedUsers << [name: k, posts: v, diff: diff]
+		if (diff instanceof String && currentRank <= 200) newUsers << [name: k, posts: v, rank: currentRank]
+		if (diff instanceof Number && previousRank instanceof Number && previousRank <= 50) derankedUsers << [name: k, posts: v, diff: diff]
+	}
+	a.eachWithIndex{ k, v, idx ->
+		if (!b[k]) {
+			byeUsers << [name: k, rank: idx+1]
+		}
+	}
+
+	out << "\n"
+	out << "Going up\n"
+	rankedUsers.sort { ua, ub -> ub.diff <=> ua.diff }.take(10).each {
+		out << "${it.name}, ${it.diff}\n"
+	}
+	out << "\n"
+	out << "Going down\n"
+	derankedUsers.sort { ua, ub -> ua.diff <=> ub.diff }.take(10).each {
+		out << "${it.name}, ${it.diff}\n"
+	}
+	out << "\n"
+	out << "Coming in\n"
+	newUsers.sort { ua, ub -> ua.rank <=> ub.rank }.take(20).each {
+		out << "${it.name}, ${it.rank}\n"
+	}
+	out << "\n"
+	out << "Going out\n"
+	byeUsers.sort { ua, ub -> ua.rank <=> ub.rank }.take(20).each {
+		out << "${it.name}, ${it.rank}\n"
 	}
 }
 
-File out = new File("/home/bbr/Desktop/hitlist_2007.csv")
+File out = new File("/Users/bbr/Desktop/hitlist_2007.csv")
+out.delete()
 out << "year 2007\n"
+print "year 2007\n"
 out << "rank, user, posts, previous rank, difference\n"
+print "rank, user, posts, previous rank, difference\n"
 topresults.first().eachWithIndex {  k, v, idx ->
 	def currentRank = idx +1
 	out << "$currentRank, $k, $v, -, -\n"
+	print "$currentRank, $k, $v, -, -\n"
 }
 
 def year = 2008
