@@ -8,6 +8,15 @@ import groovyx.net.http.HttpResponseDecorator
 import org.apache.http.params.HttpConnectionParams
 import org.apache.http.params.HttpParams
 
+
+import javax.net.ssl.X509TrustManager
+import javax.net.ssl.SSLContext
+import java.security.cert.X509Certificate
+import javax.net.ssl.TrustManager
+import java.security.SecureRandom
+import org.apache.http.conn.ssl.SSLSocketFactory
+import org.apache.http.conn.scheme.Scheme
+
 class Browser
 {
 
@@ -31,15 +40,28 @@ class Browser
   {
     this.hostUrl = host
     http = new HTTPBuilder(hostUrl)
+
+    SSLContext sslContext = SSLContext.getInstance("SSL")
+    sslContext.init(null, [ new X509TrustManager() {
+      public X509Certificate[] getAcceptedIssuers() {null }
+      public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+      public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+    } ] as TrustManager[], new SecureRandom())
+    def sf = new SSLSocketFactory(sslContext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER)
+    def httpsScheme = new Scheme("https", sf, 443)
+    http.client.connectionManager.schemeRegistry.register( httpsScheme )
+
+
     HttpParams params = http.client.getParams();
-    HttpConnectionParams.setConnectionTimeout(params, 10000);
-    HttpConnectionParams.setSoTimeout(params, 10000)
+    HttpConnectionParams.setConnectionTimeout(params, 20000);
+    HttpConnectionParams.setSoTimeout(params, 20000)
   }
 
   public void login(String user, String password)
   {
     def hashedPassword = SecurityUtils.toMD5(password)
     def postBody = [
+            securitytoken: "1606766422-d301811be2621bcdc6ff190e38a1ef5bd290c9bf",
             do: 'login',
             vb_login_username: user,
             vb_login_md5password_utf: hashedPassword,

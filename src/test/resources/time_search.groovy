@@ -12,7 +12,7 @@ def searchuser = ""
 def maxresults = 99999
 def yearStart = new GregorianCalendar(2012, Calendar.JANUARY, 1).getTime()
 
-Credentials credentials = new Credentials(username: "user", password: "pass")
+Credentials credentials = new Credentials(username: "x", password: "y")
 ForumService service = new ForumService(credentials, "http://forum.shrimprefuge.be")
 
 def removeOld = { List list ->

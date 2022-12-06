@@ -55,7 +55,7 @@ class Target {
 }
 
 Map posters = [:]
-Credentials credentials = new Credentials(username: "user", password: "pass")
+Credentials credentials = new Credentials(username: "x", password: "y")
 ForumService postService = new ForumService(credentials, "http://forum.shrimprefuge.be")
 
 def findOrCreate = { String username ->

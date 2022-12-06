@@ -2,7 +2,7 @@ import forum.model.Credentials
 import forum.ForumService
 import forum.model.Member
 
-Credentials credentials = new Credentials(username: "user", password: "pass")
+Credentials credentials = new Credentials(username: "x", password: "y")
 ForumService postService = new ForumService(credentials, "http://forum.shrimprefuge.be")
 def membs = postService.collectMembers(500)
 println "Found: ${membs.size()}"

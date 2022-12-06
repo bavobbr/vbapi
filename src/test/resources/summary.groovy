@@ -13,7 +13,7 @@ def newday = 0
 def postThreadId = 16932
 def readThreadId = 16914
 Day day = new Day()
-Credentials credentials = new Credentials(username: "Shrimpwars Bot", password: "boterkoek")
+Credentials credentials = new Credentials(username: "x", password: "y")
 ForumService postService = new ForumService(credentials, "http://forum.shrimprefuge.be")
 
 List<Post> posts = postService.scanPosts(readThreadId);

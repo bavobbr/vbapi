@@ -10,6 +10,8 @@ class ForumService
 	Credentials credentials
 	String host
 
+	PostManager postManager
+
 	public ForumService(Credentials credentials, String host)
 	{
 		this.credentials = credentials
@@ -44,16 +46,21 @@ class ForumService
 
 	Post getPost(int postId)
 	{
-		PostManager harvester = new PostManager(host, credentials)
-		def post = harvester.findPost(postId)
+		def post = createPostManager().findPost(postId)
 		return post
 	}
 
 	List<Post> getPosts(int startId, int fetchSize)
 	{
-		PostManager harvester = new PostManager(host, credentials)
-		def post = harvester.findPosts(startId, fetchSize)
+		def post = createPostManager().findPosts(startId, fetchSize)
 		return post
+	}
+
+	PostManager createPostManager() {
+		if (!postManager) {
+			PostManager harvester = new PostManager(host, credentials)
+		}
+		else return postManager
 	}
 
 	List<Integer> getThreadIds(int subforumId, int page)

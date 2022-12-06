@@ -76,4 +76,5 @@ results.each { List data ->
 		year = cal.get(Calendar.YEAR)+1
 	}
 }
-println "$year, ${total/10*12 as Long}, ${valid/10*12 as Long}, ${deleted/10*12 as Long}, ${users/10 as Long}"
+println "$year, $total, $valid, $deleted, ${users/12 as Long}"
+println "$year, ${total/12 as Long}, ${valid/12 as Long}, ${deleted/12 as Long}, ${users/12 as Long}"

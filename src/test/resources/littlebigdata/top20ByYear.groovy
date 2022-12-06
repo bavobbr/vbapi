@@ -44,6 +44,7 @@ println "\n"
 		LinkedHashMap sorted = map.sort { a, b -> b.value <=> a.value }
 		def aslist = sorted.collect { [it.key, it.value] }
 		def person = aslist[idx-1]
+		if (person)
 		print person[0]+", "
 	}
 	print "\n"

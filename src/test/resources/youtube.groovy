@@ -2,7 +2,7 @@ import forum.model.Post
 import forum.ForumService
 import forum.model.Credentials
 
-Credentials credentials = new Credentials(username: "Shrimpwars Bot", password: "boterkoek")
+Credentials credentials = new Credentials(username: "x", password: "y")
 ForumService service = new ForumService(credentials, "http://forum.shrimprefuge.be")
 List<Post> posts = service.scanPosts(15372);
 Set unmatched = [] as HashSet
