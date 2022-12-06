@@ -5,6 +5,8 @@ import forum.utils.PostUtils
 import forum.model.Credentials
 import groovy.util.slurpersupport.GPathResult
 
+import java.time.LocalDateTime
+
 class MemberManager
 {
 
@@ -54,8 +56,8 @@ class MemberManager
       def dateJoinedValue = parseDateJoined(memberpage)
       def avatarValue = parseAvatar(memberpage)
       Integer totalPosts = PostUtils.convertInteger(totalPostsValue)
-      Date lastActive = PostUtils.convertDate(lastActiveValue)
-      Date dateJoined = PostUtils.convertDate(dateJoinedValue)
+      LocalDateTime lastActive = PostUtils.convertDate(lastActiveValue)
+      LocalDateTime dateJoined = PostUtils.convertDate(dateJoinedValue)
       URL avatar = null
       if (avatarValue)
       {

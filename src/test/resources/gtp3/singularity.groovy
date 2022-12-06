@@ -13,7 +13,7 @@ OpenAiService openai = new OpenAiService("x", 60)
 def threadId = 23062
 def preamble = "Je bent een intelligente bot. Je antwoordt op volgend bericht: "
 
-def thread = service.getThread(threadId, 100, 7)
+def thread = service.getThread(threadId, 4, 7)
 def lastRepliedAll = thread.posts.findAll { it.username == credentials.username }
 def lastRepliedPost = -1
 if (lastRepliedAll) {

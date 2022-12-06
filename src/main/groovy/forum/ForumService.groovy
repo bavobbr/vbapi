@@ -3,6 +3,9 @@ package forum
 import forum.http.*
 import forum.model.*
 
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+
 class ForumService
 {
 
@@ -99,11 +102,8 @@ class ForumService
 		int lastpostfound = posts.size()
 		while (lastpostfound >= 200 && posts.size() < maxResults)
 		{
-			Post last = posts.last();
-			def nmillis = new Date().getTime()
-			def tmillis = last.date.getTime()
-			def diff = nmillis - tmillis
-			int days = (int) (diff / (60 * 60 * 24 * 1000)) + 1
+			Post last = posts.last()
+			long days = ChronoUnit.DAYS.between(last.date, LocalDateTime.now())
 			println "Oldest day in batch is $days"
 			sleep 5000
 			if (days < dayLimit)

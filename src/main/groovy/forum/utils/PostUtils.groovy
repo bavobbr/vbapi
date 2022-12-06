@@ -3,6 +3,11 @@ package forum.utils
 import groovy.util.slurpersupport.GPathResult
 import forum.model.Post
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class PostUtils {
 
@@ -67,44 +72,37 @@ class PostUtils {
         return false
     }
 
-    static public Date convertDate(String time) {
+    static public LocalDateTime convertDate(String time) {
         if (time == null || time.trim().length() == 0) {
             return null
         }
         //"yyyy.MM.dd G 'at' HH:mm:ss z"
         //Yesterday, 23:48
         //18-03-2011, 12:51
-        Date now = new Date()
-        SimpleDateFormat sdf
-        Date date
+        LocalDateTime date
+        time = time.trim()
         if (time =~ "Yesterday") {
             time = time.replace(",","")
-            sdf = new SimpleDateFormat("'Yesterday 'HH:mm")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
-            date[Calendar.YEAR] = now[Calendar.YEAR]
-            date[Calendar.MONTH] = now[Calendar.MONTH]
-            date[Calendar.DAY_OF_MONTH] = now[Calendar.DAY_OF_MONTH]
-            date = date - 1
+            def fmt = DateTimeFormatter.ofPattern("'Yesterday 'HH:mm").withZone(ZoneId.of("Europe/Brussels"))
+            def rawtime = LocalTime.parse(time, fmt)
+            def rawdate = LocalDateTime.now().with(rawtime)
+            date = rawdate.minusDays(1)
         }
         else if (time =~ "Today") {
             time = time.replace(",","")
-            sdf = new SimpleDateFormat("'Today 'HH:mm")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
-            date[Calendar.YEAR] = now[Calendar.YEAR]
-            date[Calendar.MONTH] = now[Calendar.MONTH]
-            date[Calendar.DAY_OF_MONTH] = now[Calendar.DAY_OF_MONTH]
+            def fmt = DateTimeFormatter.ofPattern("'Today 'HH:mm").withZone(ZoneId.of("Europe/Brussels"))
+            def rawtime = LocalTime.parse(time, fmt)
+            date = LocalDateTime.now().with(rawtime)
         }
         else  if (time =~ ",") {
-            sdf = new SimpleDateFormat("dd-MM-yyyy',' HH:mm")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
+            def fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy',' HH:mm").withZone(ZoneId.of("Europe/Brussels"))
+            def rawdate = LocalDateTime.parse(time, fmt)
+            date = rawdate.minusDays(1)
         }
         else {
-            sdf = new SimpleDateFormat("dd-MM-yyyy")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
+            def fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy").withZone(ZoneId.of("Europe/Brussels"))
+            def rawdate = LocalDateTime.parse(time, fmt)
+            date = rawdate.minusDays(1)
         }
         return date
     }

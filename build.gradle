@@ -1,25 +1,44 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'maven-publish'
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'groovy'
+}
 
-version = '1.3'
+version = '1.4'
 group = "bavobbr"
 
 repositories {
+    mavenLocal()
     mavenCentral()
+}
+
+java {
+    withSourcesJar()
 }
 
 dependencies {
     implementation group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.7'
     implementation 'com.theokanning.openai-gpt3-java:client:0.8.1'
-    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '2.4.6'
-    implementation group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.4.6'
-    implementation group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.4.6'
-    implementation group: 'org.codehaus.groovy', name: 'groovy-xml', version: '2.4.6'
-    implementation 'commons-cli:commons-cli:1.2'
-    testImplementation 'mysql:mysql-connector-java:5.1.20'
+    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.13'
+    implementation group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.5.13'
+    implementation group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.13'
+    implementation group: 'org.codehaus.groovy', name: 'groovy-xml', version: '2.5.13'
+    implementation 'commons-cli:commons-cli:20040117.000000'
+    testImplementation 'mysql:mysql-connector-java:8.0.30'
     testImplementation group: 'junit', name: 'junit', version: '4.8.2'
 
+    testImplementation 'org.slf4j:slf4j-api:1.7.12'
+    testImplementation 'org.slf4j:slf4j-log4j12:1.7.12'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.name
+            from components.java
+        }
+    }
 }
 
 

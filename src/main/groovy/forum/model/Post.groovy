@@ -2,6 +2,8 @@ package forum.model
 
 import forum.utils.PostUtils
 
+import java.time.LocalDateTime
+
 public class Post {
 
     String username
@@ -9,7 +11,7 @@ public class Post {
     String forum
     Integer postId
     Integer postNumber
-    Date date
+    LocalDateTime date
 	Boolean valid = true
 
     public String toString() {

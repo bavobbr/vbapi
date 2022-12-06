@@ -6,6 +6,8 @@ import forum.utils.PostUtils
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 
+import java.time.LocalDateTime
+
 class PostManager
 {
 
@@ -55,7 +57,7 @@ class PostManager
 				String username = getUsername(postnode)
 				String message = getPostText(postnode)
 				String datetext = getPostDate(postnode)
-				Date date = PostUtils.convertDate(datetext)
+				LocalDateTime date = PostUtils.convertDate(datetext)
 				post = new Post(username: username, message: message, date: date)
 			}
 			catch (e) {

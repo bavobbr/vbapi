@@ -1,10 +1,12 @@
 package forum.http
 
+import forum.utils.PostUtils
 import groovy.util.slurpersupport.GPathResult
 import forum.model.Credentials
 import forum.model.Post
 
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 
 class SearchManager {
 
@@ -90,7 +92,7 @@ class SearchManager {
                 //Integer postnumber = getPostNumber(it) as Integer
                 String datetext = getPostDate(it)
                 String forumId = getForum(it)
-                Date date = convertDate(datetext)
+                LocalDateTime date = PostUtils.convertDate(datetext)
                 Post post = new Post(username: username, message: message, postId: postid, date: date, forum: forumId)
                 postObjects << post
             }
@@ -148,37 +150,6 @@ class SearchManager {
         return postnodes
     }
 
-    private Date convertDate(String time) {
-        //"yyyy.MM.dd G 'at' HH:mm:ss z"
-        //Yesterday, 23:48
-        //18-03-2011, 12:51
-        Date now = new Date()
-        SimpleDateFormat sdf
-        Date date
-        if (time =~ "Yesterday") {
-            sdf = new SimpleDateFormat("'Yesterday, 'HH:mm")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
-            date[Calendar.YEAR] = now[Calendar.YEAR]
-            date[Calendar.MONTH] = now[Calendar.MONTH]
-            date[Calendar.DAY_OF_MONTH] = now[Calendar.DAY_OF_MONTH]
-            date = date - 1
-        }
-        else if (time =~ "Today") {
-            sdf = new SimpleDateFormat("'Today, 'HH:mm")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
-            date[Calendar.YEAR] = now[Calendar.YEAR]
-            date[Calendar.MONTH] = now[Calendar.MONTH]
-            date[Calendar.DAY_OF_MONTH] = now[Calendar.DAY_OF_MONTH]
-        }
-        else {
-            sdf = new SimpleDateFormat("dd-MM-yyyy',' HH:mm")
-            sdf.setTimeZone(TimeZone.getTimeZone("Europe/Brussels"))
-            date = sdf.parse(time.trim())
-        }
-        return date
-    }
 
 
 }

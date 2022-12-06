@@ -1,12 +1,14 @@
 package forum.model
 
+import java.time.LocalDateTime
+
 class Member {
 
     String username
     Integer memberId
-    Date lastActive
+    LocalDateTime lastActive
     Integer totalPosts
-    Date joined
+    LocalDateTime joined
     URL avatar
 
 

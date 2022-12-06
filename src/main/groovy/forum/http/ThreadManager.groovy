@@ -5,6 +5,10 @@ import groovy.xml.StreamingMarkupBuilder
 import forum.model.*
 import forum.utils.PostUtils
 
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+
 class ThreadManager {
 
     private Browser browser
@@ -23,10 +27,10 @@ class ThreadManager {
         def posts = []
         println "Starting to scan thread [${title}]"
         posts = getAllPosts(threadId, threadNode, maxDays, maxPages)
-        def now = new Date()
+        def now = LocalDateTime.now()
         if (maxDays > 0) {
             posts.retainAll {
-                it.date > now.minus(maxDays)
+                it.date.isAfter(now.minusDays(maxDays))
             }
         }
         posts = posts.sort { Post a, Post b -> a.postNumber <=> b.postNumber }
@@ -52,7 +56,7 @@ class ThreadManager {
         int lastPost = 0
         List<Post> threadposts = []
         def nmillis = new Date().getTime()
-        int days = 0
+        long days = 0
         while (paging && days < maxDays && pager >= startpage) {
             println "paging page $pager"
             def thread = threadPage(threadId, pager)
@@ -69,9 +73,7 @@ class ThreadManager {
                 lastPost = currentLastPost
                 threadposts.addAll(posts)
                 pager--
-                def tmillis = posts.last().date.getTime()
-                def diff = nmillis - tmillis
-                days = (int) (diff / (60 * 60 * 24 * 1000)) + 1
+                days = ChronoUnit.DAYS.between(posts.last().date, LocalDateTime.now())
             }
         }
         println "exited scan with paging $paging, days $days and pager $pager"
@@ -160,7 +162,7 @@ class ThreadManager {
             Integer postid = getPostId(it) as Integer
             Integer postnumber = getPostNumber(it) as Integer
             String datetext = getPostDate(it)
-            Date date = PostUtils.convertDate(datetext)
+            LocalDateTime date = PostUtils.convertDate(datetext)
             Post post = new Post(username: username, message: message, postId: postid, postNumber: postnumber, date: date)
             if (username && message) {
                 postObjects << post

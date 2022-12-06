@@ -1,10 +1,12 @@
 package forum.model
 
+import java.time.LocalDateTime
+
 class Vote {
 
     User user
     User target
-    Date date
+    LocalDateTime date
     Integer postNumber
 
     public String toString() {
