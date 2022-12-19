@@ -62,6 +62,7 @@ class ForumService
 	PostManager createPostManager() {
 		if (!postManager) {
 			PostManager harvester = new PostManager(host, credentials)
+			return harvester
 		}
 		else return postManager
 	}
@@ -89,16 +90,25 @@ class ForumService
 	List<Post> searchPosts(String searchString, String forumid, String user)
 	{
 		SearchManager searcher = new SearchManager(host, credentials)
-		List<Post> posts = []
-		posts = searcher.findPosts(searchString, forumid, user, null)
-		return posts
+		return searcher.findPosts(searchString, forumid, user, null)
 	}
 
-	List<Post> searchPosts(String searchString, String forumid, String user, int maxResults)
+	List<Post> searchPosts(String searchString, String forumid, Integer daysAgo, boolean before)
+	{
+		SearchManager searcher = new SearchManager(host, credentials)
+		return searcher.findPosts(searchString, forumid, null, daysAgo, before)
+	}
+
+	List<Post> searchPosts(String searchString, String forumid, String user, int maxResults) {
+		return searchPosts(searchString, forumid, user, maxResults, 7, false)
+	}
+
+
+	List<Post> searchPosts(String searchString, String forumid, String user, int maxResults, Integer daysAgo, boolean before)
 	{
 		SearchManager searcher = new SearchManager(host, credentials)
 		List<Post> posts = []
-		posts = searcher.findPosts(searchString, forumid, user, null)
+		posts = searcher.findPosts(searchString, forumid, user, daysAgo, before)
 		int lastpostfound = posts.size()
 		while (lastpostfound >= 200 && posts.size() < maxResults)
 		{

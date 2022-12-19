@@ -11,6 +11,7 @@ import org.apache.http.params.HttpParams
 
 import javax.net.ssl.X509TrustManager
 import javax.net.ssl.SSLContext
+import java.nio.charset.Charset
 import java.security.cert.X509Certificate
 import javax.net.ssl.TrustManager
 import java.security.SecureRandom
@@ -55,6 +56,8 @@ class Browser
     HttpParams params = http.client.getParams();
     HttpConnectionParams.setConnectionTimeout(params, 20000);
     HttpConnectionParams.setSoTimeout(params, 20000)
+    http.encoder.charset = "ISO-8859-1"
+
   }
 
   public void login(String user, String password)
@@ -141,10 +144,10 @@ class Browser
 
   public GPathResult getSearchIdPage(String terms)
   {
-    getSearchIdPage(terms, null, null, null);
+    getSearchIdPage(terms, null, null, null, true);
   }
 
-  public GPathResult getSearchIdPage(String terms, String forumid, String user, String daysAgo)
+  public GPathResult getSearchIdPage(String terms, String forumid, String user, Integer daysAgo, boolean before)
   {
     Map query = [:]
     query.do = "process"
@@ -152,11 +155,18 @@ class Browser
     if (terms) query.query = terms
     else query.query = ""
     if (forumid) query."forumchoice[]" = forumid
-    if (user) query.searchuser = user
+    if (user) {
+      query.searchuser = user
+      query.exactname = "1"
+    }
     if (daysAgo)
     {
       query.searchdate = daysAgo
-      query.beforeafter = "before"
+      query.beforeafter = before? "before" : "after"
+    }
+    else {
+      query.searchdate = 0
+      query.beforeafter = "after"
     }
     query.sortby = "lastpost"
     query.sortorder = "descending"

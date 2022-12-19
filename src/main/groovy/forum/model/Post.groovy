@@ -13,6 +13,7 @@ public class Post {
     Integer postNumber
     LocalDateTime date
 	Boolean valid = true
+    Integer threadId
 
     public String toString() {
         return "[${username}] $message\n at $date [${postId}] [${postNumber}] [${valid}}"
